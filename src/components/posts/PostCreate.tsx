@@ -1,8 +1,9 @@
-import { ReactNode, useRef } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Create, FormControl, FormErrorMessage, FormLabel, Input, Select, InputGroup, Button } from '@pankod/refine-chakra-ui';
 import { useSelect } from '@pankod/refine-core';
 import { useForm, UseFormRegisterReturn } from '@pankod/refine-react-hook-form';
 import { IPost } from '../../interfaces';
+import { supabaseClient as supabase } from 'src/services';
 
 type FileUploadProps = {
   register: UseFormRegisterReturn;
@@ -22,7 +23,7 @@ const FileUpload = ({ register, accept, multiple, children }: FileUploadProps) =
   return (
     <InputGroup onClick={handleClick}>
       <input
-        type={'file'}
+        type="file"
         multiple={multiple || false}
         hidden
         accept={accept}
@@ -38,17 +39,18 @@ const FileUpload = ({ register, accept, multiple, children }: FileUploadProps) =
 };
 
 export default function PostCreate() {
+  const [uploadStatus, setUploadStatus] = useState<'idle' | 'loading' | 'error'>('idle');
   const {
     refineCore: { formLoading },
     saveButtonProps,
     getValues,
+    watch,
     register,
-    formState: { errors, touchedFields },
+    formState: { errors },
   } = useForm<IPost>();
 
-  const { options } = useSelect({
-    resource: 'category',
-  });
+  const watchImage = watch('image');
+  const { options } = useSelect({ resource: 'category' });
 
   const validateFiles = (value: FileList) => {
     if (value.length < 1) {
@@ -59,6 +61,19 @@ export default function PostCreate() {
     }
     return true;
   };
+
+  async function uploadImage() {
+    if (!watchImage?.length) return;
+    setUploadStatus('loading');
+    const { data, error } = await supabase.storage.from('avatars').upload(watchImage[0].name, watchImage[0]);
+    setUploadStatus(!error ? 'idle' : 'error');
+
+    console.log({ data, error });
+  }
+
+  useEffect(() => {
+    uploadImage();
+  }, [watchImage]);
 
   return (
     <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
@@ -101,8 +116,8 @@ export default function PostCreate() {
       </FormControl>
       <FormControl mb="3" isInvalid={!!errors?.title}>
         <FormLabel>Image</FormLabel>
-        <FileUpload accept={'image/*'} multiple register={register('image', { validate: validateFiles })}>
-          <Button>Import</Button>
+        <FileUpload accept={'/*'} multiple register={register('image', { validate: validateFiles })}>
+          <Button isLoading={uploadStatus === 'loading'}>Import</Button>
         </FileUpload>
         <FormErrorMessage>{`${errors.image?.message}`}</FormErrorMessage>
       </FormControl>
