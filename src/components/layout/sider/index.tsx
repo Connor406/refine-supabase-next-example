@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   CanAccess,
   ITreeMenu,
@@ -9,7 +9,7 @@ import {
   useRouterContext,
   useTitle,
   useTranslate,
-} from "@pankod/refine-core";
+} from '@pankod/refine-core';
 import {
   Accordion,
   AccordionButton,
@@ -26,17 +26,10 @@ import {
   TooltipProps,
   VStack,
   Sider as DefaultSider,
-} from "@pankod/refine-chakra-ui";
-import {
-  IconList,
-  IconChevronRight,
-  IconChevronLeft,
-  IconDashboard,
-  IconLogout,
-  IconMenu2,
-} from "@tabler/icons";
+} from '@pankod/refine-chakra-ui';
+import { IconList, IconChevronRight, IconChevronLeft, IconDashboard, IconLogout, IconMenu2 } from '@tabler/icons';
 
-import { Title as DefaultTitle } from "../title";
+import { Title as DefaultTitle } from '../title';
 
 const defaultNavIcon = <IconList size={20} />;
 
@@ -55,12 +48,12 @@ export const Sider: typeof DefaultSider = ({ render }) => {
   const RenderToTitle = Title ?? DefaultTitle;
 
   const siderWidth = () => {
-    if (collapsed) return "80px";
-    return "200px";
+    if (collapsed) return '80px';
+    return '200px';
   };
 
-  const commonTooltipProps: Omit<TooltipProps, "children"> = {
-    placement: "right",
+  const commonTooltipProps: Omit<TooltipProps, 'children'> = {
+    placement: 'right',
     hasArrow: true,
     isDisabled: !collapsed || opened,
   };
@@ -88,21 +81,10 @@ export const Sider: typeof DefaultSider = ({ render }) => {
             resource: item,
           }}
         >
-          <Accordion
-            defaultIndex={defaultOpenKeys.includes(route || "") ? 0 : -1}
-            width="full"
-            allowToggle
-          >
+          <Accordion defaultIndex={defaultOpenKeys.includes(route || '') ? 0 : -1} width="full" allowToggle>
             <AccordionItem border="none">
               <Tooltip label={label} {...commonTooltipProps}>
-                <AccordionButton
-                  pl={6}
-                  pr={4}
-                  pt={3}
-                  pb={3}
-                  as="div"
-                  width="full"
-                >
+                <AccordionButton pl={6} pr={4} pt={3} pb={3} as="div" width="full">
                   <Button
                     width="full"
                     variant="link"
@@ -111,10 +93,10 @@ export const Sider: typeof DefaultSider = ({ render }) => {
                     leftIcon={icon ?? (defaultNavIcon as any)}
                     rightIcon={isParent ? <AccordionIcon /> : undefined}
                     _active={{
-                      color: "none",
-                      fontWeight: isParent ? "normal" : "bold",
+                      color: 'none',
+                      fontWeight: isParent ? 'normal' : 'bold',
                     }}
-                    _hover={{ textDecoration: "none" }}
+                    _hover={{ textDecoration: 'none' }}
                     isActive={isSelected}
                     {...linkProps}
                   >
@@ -145,13 +127,10 @@ export const Sider: typeof DefaultSider = ({ render }) => {
 
   const dashboard = hasDashboard ? (
     <CanAccess resource="dashboard" action="list">
-      <Tooltip
-        label={t("dashboard.title", "Dashboard")}
-        {...commonTooltipProps}
-      >
+      <Tooltip label={t('dashboard.title', 'Dashboard')} {...commonTooltipProps}>
         <Button
           width="full"
-          justifyContent={collapsed && !opened ? "center" : "flex-start"}
+          justifyContent={collapsed && !opened ? 'center' : 'flex-start'}
           pl={6}
           pr={4}
           pt={3}
@@ -160,23 +139,23 @@ export const Sider: typeof DefaultSider = ({ render }) => {
           leftIcon={<IconDashboard size={20} />}
           variant="link"
           color="white"
-          isActive={selectedKey === "/"}
-          _active={{ color: "none", fontWeight: "bold" }}
-          _hover={{ textDecoration: "none" }}
+          isActive={selectedKey === '/'}
+          _active={{ color: 'none', fontWeight: 'bold' }}
+          _hover={{ textDecoration: 'none' }}
           as={Link}
           to="/"
         >
-          {(!collapsed || opened) && t("dashboard.title", "Dashboard")}
+          {(!collapsed || opened) && t('dashboard.title', 'Dashboard')}
         </Button>
       </Tooltip>
     </CanAccess>
   ) : null;
 
   const logout = isExistAuthentication && (
-    <Tooltip label={t("buttons.logout", "Logout")} {...commonTooltipProps}>
+    <Tooltip label={t('buttons.logout', 'Logout')} {...commonTooltipProps}>
       <Button
         width="full"
-        justifyContent={collapsed && !opened ? "center" : "flex-start"}
+        justifyContent={collapsed && !opened ? 'center' : 'flex-start'}
         pl={6}
         pr={4}
         pt={3}
@@ -184,12 +163,12 @@ export const Sider: typeof DefaultSider = ({ render }) => {
         fontWeight="normal"
         leftIcon={<IconLogout size={20} />}
         variant="link"
-        _active={{ color: "none" }}
-        _hover={{ textDecoration: "none" }}
+        _active={{ color: 'none' }}
+        _hover={{ textDecoration: 'none' }}
         color="white"
         onClick={() => mutateLogout()}
       >
-        {(!collapsed || opened) && t("buttons.logout", "Logout")}
+        {(!collapsed || opened) && t('buttons.logout', 'Logout')}
       </Button>
     </Tooltip>
   );
@@ -214,21 +193,15 @@ export const Sider: typeof DefaultSider = ({ render }) => {
 
   return (
     <>
-      <Box
-        position="fixed"
-        top={16}
-        left={0}
-        zIndex={1200}
-        display={["block", "block", "none", "none", "none"]}
-      >
+      <Box position="fixed" top={16} left={0} zIndex={1200} display={['block', 'block', 'none', 'none', 'none']}>
         <IconButton
           borderLeftRadius={0}
           bg="sider.background"
           color="white"
-          _hover={{ bg: "sider.background" }}
+          _hover={{ bg: 'sider.background' }}
           _active={{
-            bg: "sider.background",
-            transform: "translateY(1px)",
+            bg: 'sider.background',
+            transform: 'translateY(1px)',
           }}
           aria-label="Open Menu"
           onClick={() => setOpened((prev) => !prev)}
@@ -249,7 +222,7 @@ export const Sider: typeof DefaultSider = ({ render }) => {
       </Drawer>
 
       <Box
-        display={["none", "none", "flex"]}
+        display={['none', 'none', 'flex']}
         width={siderWidth()}
         transition="width 200ms ease, min-width 200ms ease"
         flexShrink={0}
@@ -260,7 +233,7 @@ export const Sider: typeof DefaultSider = ({ render }) => {
         width={siderWidth()}
         top={0}
         h="100vh"
-        display={["none", "none", "flex"]}
+        display={['none', 'none', 'flex']}
         flexDirection="column"
         transition="width 200ms ease, min-width 200ms ease"
       >
@@ -275,10 +248,10 @@ export const Sider: typeof DefaultSider = ({ render }) => {
           color="white"
           bg="sider.collapseButton"
           borderRadius={0}
-          _hover={{ bg: "sider.collapseButton" }}
+          _hover={{ bg: 'sider.collapseButton' }}
           _active={{
-            bg: "sider.collapseButton",
-            transform: "translateY(1px)",
+            bg: 'sider.collapseButton',
+            transform: 'translateY(1px)',
           }}
         >
           {collapsed ? <IconChevronRight /> : <IconChevronLeft />}
